@@ -2,3 +2,5 @@
 pull-request-demo/
 
 rottenpotatoes/tmp/*
+
+*.log
