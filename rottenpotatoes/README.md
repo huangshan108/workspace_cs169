@@ -54,9 +54,12 @@ their counterparts from the provided
 * app/views/layouts/application.html.haml
 * app/views/movies/*.html.haml
 * app/models/movie.rb
-* config.ru
+* config.ru 
 * db/seeds.rb
-* db/migrate/*
+
+
+
+0. When you generate the Rails scaffolding, you are given a default global HTML layout in `app/views/layouts/application.html.erb`.  However, we give a pre-written HAML template instead at `app/views/layouts/application.html.haml`.  This means you should remove `app/views/layouts/application.html.erb` so that Rails uses the HAML template instead.
 
 Commit the new versions of these files.
 
@@ -98,7 +101,7 @@ file for us that will add the columns
 title (string), release date (datetime), rating (string), and
 description (text) to a table called `movies`?
 
-> `rails generate migration Movies title:string release_date:datetime rating:string description:text`
+> `rails generate migration AddFieldsToMovies title:string release_date:datetime rating:string description:text`
 
 Take a look at the migration file that was created.  The `change` method
 defines what happens when the migration is applied.
