@@ -27,7 +27,6 @@ class MoviesController < ApplicationController
       end
       session[:ratings_on] = @ratings_on
     end
-    debugger
     if params[:sort] == "sort_movie_title" || session[:sorted_movie_title]
       @movies = @movies.sort_by{ |k| k["title"] }  
       session[:sorted_movie_title] = true
