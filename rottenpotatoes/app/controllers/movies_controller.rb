@@ -1,4 +1,5 @@
 class MoviesController < ApplicationController
+  before_filter :setup_ratings
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -7,7 +8,15 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    if params[:ratings] == nil
+      @movies = []
+      return
+    end
+    @ratings_on = {}
+    @movies = Movie.find(:all, :conditions => {:rating => params[:ratings].keys})
+    params[:ratings].keys.each do |key|
+      @ratings_on[key] = true
+    end
     @sorted_movie_title = false
     @sorted_release_date
     if params[:sort] == "sort_movie_title"
@@ -45,5 +54,10 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+
+  private
+  def setup_ratings
+    @all_ratings = ['G','PG','PG-13','R']
   end
 end
