@@ -4,7 +4,6 @@
   Include: 
   - @all_ratings.each do |rating|
     = rating
-    - puts rating + " xxx ", @ratings_on[rating]
     = check_box_tag "ratings[#{rating}]", nil, @ratings_on[rating] ? :checked : nil
   = submit_tag 'Refresh'
 %table#movies

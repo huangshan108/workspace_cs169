@@ -8,14 +8,24 @@ class MoviesController < ApplicationController
   end
 
   def index
-    if params[:ratings] == nil
-      @movies = []
-      return
-    end
+    @movies = Movie.all
     @ratings_on = {}
-    @movies = Movie.find(:all, :conditions => {:rating => params[:ratings].keys})
-    params[:ratings].keys.each do |key|
-      @ratings_on[key] = true
+    if params[:ratings] == nil
+      if session[:ratings_on] == nil
+        @all_ratings.each do |key|
+          @ratings_on[key] = true
+        end
+        session[:ratings_on] = @ratings_on
+      else
+        @ratings_on = session[:ratings_on]
+        @movies = Movie.find(:all, :conditions => {:rating => @ratings_on.keys})
+      end
+    else
+      @movies = Movie.find(:all, :conditions => {:rating => params[:ratings].keys})
+      params[:ratings].keys.each do |key|
+        @ratings_on[key] = true
+      end
+      session[:ratings_on] = @ratings_on
     end
     @sorted_movie_title = false
     @sorted_release_date
