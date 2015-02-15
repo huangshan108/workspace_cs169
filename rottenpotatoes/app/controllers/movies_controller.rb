@@ -27,15 +27,18 @@ class MoviesController < ApplicationController
       end
       session[:ratings_on] = @ratings_on
     end
-    @sorted_movie_title = false
-    @sorted_release_date
-    if params[:sort] == "sort_movie_title"
+    debugger
+    if params[:sort] == "sort_movie_title" || session[:sorted_movie_title]
       @movies = @movies.sort_by{ |k| k["title"] }  
-      @sorted_movie_title = true
-    elsif params[:sort] == "sort_release_date"
+      session[:sorted_movie_title] = true
+      session[:sorted_release_date] = nil
+    elsif params[:sort] == "sort_release_date" || session[:sorted_release_date]
       @movies = @movies.sort_by{ |k| k["release_date"] }
-      @sorted_release_date = true
+      session[:sorted_release_date] = true
+      session[:sorted_movie_title] = nil
     end
+    @sorted_movie_title = session[:sorted_movie_title] || false
+    @sorted_release_date = session[:sorted_release_date] || false
   end
 
   def new
