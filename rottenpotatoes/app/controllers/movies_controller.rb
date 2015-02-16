@@ -24,6 +24,7 @@ class MoviesController < ApplicationController
     else
       session[:ratings_on] = params[:ratings]
     end
+    puts "session[:ratings_on]: ", session[:ratings_on]
     if params[:sort] == nil
       # print "session[:sorted_movie_title]: ", session[:sorted_movie_title]
       if session[:sorted_movie_title]
@@ -32,7 +33,11 @@ class MoviesController < ApplicationController
       elsif session[:sorted_release_date]
         redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_release_date'
         return
+      else # first time visiter
+        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'unsorted'
+        return
       end
+        
     elsif params[:ratings] == nil
       redirect_to movies_path :ratings => session[:ratings_on], :sort => params[:sort]
       return
