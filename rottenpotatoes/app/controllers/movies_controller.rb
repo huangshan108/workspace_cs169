@@ -8,17 +8,38 @@ class MoviesController < ApplicationController
   end
 
   def index
+    # if params[:ratings] == nil
+    #   if session[:ratings_on] == {}
+    #     @all_ratings.each do |key|
+    #       @ratings_on[key] = true
+    #     end
+    #   end
+    #   session[:ratings_on] = @ratings_on
+    # end
+
+
+    puts "xxx: ", params
     @movies = Movie.all
     @ratings_on = {}
     if params[:ratings] == nil
-      if session[:ratings_on] == nil
+      puts "1: ", session[:ratings_on]
+      if session[:ratings_on] == {}
         @all_ratings.each do |key|
           @ratings_on[key] = true
         end
         session[:ratings_on] = @ratings_on
+      end
+      if params[:sort] == nil
+        if session[:sorted_movie_title]
+          redirect_to movies_path, :ratings => session[:ratings_on], :sort => :sort_movie_title
+          return
+        elsif session[:sorted_release_date]
+          redirect_to movies_path, :ratings => session[:ratings_on], :sort => :sort_release_date
+          return
+        end
       else
-        @ratings_on = session[:ratings_on]
-        @movies = Movie.find(:all, :conditions => {:rating => @ratings_on.keys})
+        redirect_to movies_path, :ratings => session[:ratings_on]
+        return
       end
     else
       @movies = Movie.find(:all, :conditions => {:rating => params[:ratings].keys})
@@ -36,8 +57,8 @@ class MoviesController < ApplicationController
       session[:sorted_release_date] = true
       session[:sorted_movie_title] = nil
     end
-    @sorted_movie_title = session[:sorted_movie_title] || false
-    @sorted_release_date = session[:sorted_release_date] || false
+    # @sorted_movie_title = session[:sorted_movie_title] || false
+    # @sorted_release_date = session[:sorted_release_date] || false
   end
 
   def new
