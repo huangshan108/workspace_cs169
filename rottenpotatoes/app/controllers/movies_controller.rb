@@ -18,14 +18,14 @@ class MoviesController < ApplicationController
     # end
 
 
-    # print "xxx: ", params
+    print "xxx: ", params
     @movies = Movie.all
     @ratings_on = {}
     # puts "params[:ratings]: ", params[:ratings]
 
     # Handles redirects only. Does not do any db or rendering stuffs.
     if params[:ratings] == nil
-      if session[:ratings_on] == {}
+      if session[:ratings_on] == nil || session[:ratings_on] == {}
         @all_ratings.each do |key|
           @ratings_on[key] = true
         end
