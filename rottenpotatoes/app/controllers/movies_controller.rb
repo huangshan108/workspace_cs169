@@ -8,20 +8,10 @@ class MoviesController < ApplicationController
   end
 
   def index
-    # if params[:ratings] == nil
-    #   if session[:ratings_on] == {}
-    #     @all_ratings.each do |key|
-    #       @ratings_on[key] = true
-    #     end
-    #   end
-    #   session[:ratings_on] = @ratings_on
-    # end
-
-
-    print "xxx: ", params
+    print "xxx: ", params, "\n"
     @movies = Movie.all
     @ratings_on = {}
-    # puts "params[:ratings]: ", params[:ratings]
+    print "params[:ratings]: ", params[:ratings], "\n"
 
     # Handles redirects only. Does not do any db or rendering stuffs.
     if params[:ratings] == nil
@@ -31,27 +21,28 @@ class MoviesController < ApplicationController
         end
         session[:ratings_on] = @ratings_on
       end
-      # print "params[:sort]: ", params[:sort]
-      if params[:sort] == nil
-        # print "session[:sorted_movie_title]: ", session[:sorted_movie_title]
-        if session[:sorted_movie_title]
-          redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_movie_title'
-          return
-        elsif session[:sorted_release_date]
-          redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_release_date'
-          return
-        end
-      else
-        redirect_to movies_path :ratings => session[:ratings_on], :sort => params[:sort]
+    else
+      session[:ratings_on] = params[:ratings]
+    end
+    if params[:sort] == nil
+      # print "session[:sorted_movie_title]: ", session[:sorted_movie_title]
+      if session[:sorted_movie_title]
+        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_movie_title'
+        return
+      elsif session[:sorted_release_date]
+        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_release_date'
         return
       end
-    else
-      @movies = Movie.find(:all, :conditions => {:rating => params[:ratings].keys})
-      params[:ratings].keys.each do |key|
-        @ratings_on[key] = true
-      end
-      session[:ratings_on] = @ratings_on
+    elsif params[:ratings] == nil
+      redirect_to movies_path :ratings => session[:ratings_on], :sort => params[:sort]
+      return
     end
+
+    @movies = Movie.find(:all, :conditions => {:rating => params[:ratings].keys})
+    params[:ratings].keys.each do |key|
+      @ratings_on[key] = true
+    end
+    session[:ratings_on] = @ratings_on
     # puts "params[:sort]: ", params[:sort]
     if params[:sort] == "sort_movie_title"
       @movies = @movies.sort_by{ |k| k["title"] }  
