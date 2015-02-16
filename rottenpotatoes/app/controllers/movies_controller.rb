@@ -53,11 +53,11 @@ class MoviesController < ApplicationController
       session[:ratings_on] = @ratings_on
     end
     # puts "params[:sort]: ", params[:sort]
-    if params[:sort] == "sort_movie_title" || session[:sorted_movie_title]
+    if params[:sort] == "sort_movie_title"
       @movies = @movies.sort_by{ |k| k["title"] }  
       session[:sorted_movie_title] = true
       session[:sorted_release_date] = nil
-    elsif params[:sort] == "sort_release_date" || session[:sorted_release_date]
+    elsif params[:sort] == "sort_release_date"
       @movies = @movies.sort_by{ |k| k["release_date"] }
       session[:sorted_release_date] = true
       session[:sorted_movie_title] = nil
