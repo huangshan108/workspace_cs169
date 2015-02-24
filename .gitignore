@@ -4,3 +4,4 @@ pull-request-demo/
 rottenpotatoes/tmp/*
 
 *.log
+*.sqlite3

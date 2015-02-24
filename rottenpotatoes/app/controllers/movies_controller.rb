@@ -8,10 +8,10 @@ class MoviesController < ApplicationController
   end
 
   def index
-    print "xxx: ", params, "\n"
+    # print "xxx: ", params, "\n"
     @movies = Movie.all
     @ratings_on = {}
-    print "params[:ratings]: ", params[:ratings], "\n"
+    # print "params[:ratings]: ", params[:ratings], "\n"
 
     # Handles redirects only. Does not do any db or rendering stuffs.
     if params[:ratings] == nil
@@ -24,7 +24,7 @@ class MoviesController < ApplicationController
     else
       session[:ratings_on] = params[:ratings]
     end
-    puts "session[:ratings_on]: ", session[:ratings_on]
+    # puts "session[:ratings_on]: ", session[:ratings_on]
     if params[:sort] == nil
       # print "session[:sorted_movie_title]: ", session[:sorted_movie_title]
       if session[:sorted_movie_title]
