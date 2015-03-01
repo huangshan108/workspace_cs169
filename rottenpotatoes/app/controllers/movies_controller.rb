@@ -8,11 +8,15 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if params[:find_by_director_movie_id]
+      find_by_director(params[:find_by_director_movie_id])
+      return
+    end
+
     # print "xxx: ", params, "\n"
     @movies = Movie.all
     @ratings_on = {}
     # print "params[:ratings]: ", params[:ratings], "\n"
-
     # Handles redirects only. Does not do any db or rendering stuffs.
     if params[:ratings] == nil
       if session[:ratings_on] == nil || session[:ratings_on] == {}
@@ -28,18 +32,18 @@ class MoviesController < ApplicationController
     if params[:sort] == nil
       # print "session[:sorted_movie_title]: ", session[:sorted_movie_title]
       if session[:sorted_movie_title]
-        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_movie_title'
+        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_movie_title', :director => params[:director], :no_title => params[:no_title]
         return
       elsif session[:sorted_release_date]
-        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_release_date'
+        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'sort_release_date', :director => params[:director], :no_title => params[:no_title]
         return
       else # first time visiter
-        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'unsorted'
+        redirect_to movies_path :ratings => session[:ratings_on], :sort => 'unsorted', :director => params[:director], :no_title => params[:no_title]
         return
       end
         
     elsif params[:ratings] == nil
-      redirect_to movies_path :ratings => session[:ratings_on], :sort => params[:sort]
+      redirect_to movies_path :ratings => session[:ratings_on], :sort => params[:sort], :director => params[:director], :no_title => params[:no_title]
       return
     end
 
@@ -60,6 +64,18 @@ class MoviesController < ApplicationController
     end
     @sorted_movie_title = session[:sorted_movie_title] || false
     @sorted_release_date = session[:sorted_release_date] || false
+  end
+
+  def find_by_director(id)
+    @current_movie = Movie.find(id)
+    @no_director_info = false
+    if @current_movie.director == nil
+      @no_director_info = true
+      @movies = Movie.where(:id => id)
+    else
+      @movies = Movie.same_director(@current_movie.director)
+    end
+    render 'find_by_director'
   end
 
   def new

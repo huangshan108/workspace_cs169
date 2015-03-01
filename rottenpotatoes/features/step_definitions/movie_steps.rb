@@ -62,6 +62,11 @@ Then /I should see all the rating options are selected/ do
   check_shown_movie(rating_list, true)
 end
 
+Then /the director of "(.*?)" should be "(.*?)"$/ do |arg1, arg2|
+  regexp = /#{arg1}.*#{arg2}.*/m
+  assert_match page.source, regexp
+end
+
 def parse_ratings(ratings)
   ratings.split(",").map(&:strip)
 end
