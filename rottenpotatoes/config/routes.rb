@@ -1,6 +1,6 @@
 Rottenpotatoes::Application.routes.draw do
-  get 'movies/find_by_director/:id' => 'movies#index'
   resources :movies
+  match 'movies/find_by_director/:id' => 'movies#index'
 
 
   # The priority is based upon order of creation:
