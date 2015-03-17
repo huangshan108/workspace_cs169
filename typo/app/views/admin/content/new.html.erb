@@ -8,7 +8,7 @@
     <%= form_tag(:controller => "admin/content", :action => "merge", :method => "get") do %>
       <%= label_tag(:another_article_id, "Article ID:", :style => "text-align: left") %>
       <%= hidden_field_tag(:current_article_id, @article.id) %>
-      <%= text_field_tag(:another_article_id) %> </br>
+      <%= text_field_tag :merge_with, params[:merge_with], :name => 'merge_with' %>
       <%= submit_tag "Merge", :class => "btn primary" %>
     <% end %>
   </div>

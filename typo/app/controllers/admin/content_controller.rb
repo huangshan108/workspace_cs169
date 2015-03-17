@@ -30,7 +30,7 @@ class Admin::ContentController < Admin::BaseController
       return
     end
     this_art = Article.find_by_id(params[:current_article_id])
-    has_merged = this_art && this_art.merge_with(params[:another_article_id])
+    has_merged = this_art && this_art.merge_with(params[:merge_with])
     if has_merged
       flash[:notice] = _("Article successfully merged.")
     else
